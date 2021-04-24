@@ -53,6 +53,7 @@ h1 {
 h2 {
   font-size: 1.6rem;
   padding: 1rem 0;
+  max-width: 35rem;
 }
 
 a {
@@ -151,7 +152,11 @@ a.brand {
 }
 
 .min-30 {
-  min-width: 30rem;
+  width: 40rem;
+}
+
+.min-30 > a {
+  max-width: 35rem;
 }
 
 /* IMAGE */
@@ -181,7 +186,7 @@ img.large {
   background-color: #f8f8f8;
   border-radius: 0.5rem;
   margin: 1rem;
-  max-width: 350px;
+  /*max-width: 350px;*/
 }
 
 .card a {

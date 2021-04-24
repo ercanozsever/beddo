@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { savePaymentMethod } from '../actions/cartActions';
 import CheckoutSteps from '../components/CheckoutSteps'
@@ -6,12 +6,27 @@ import CheckoutSteps from '../components/CheckoutSteps'
 export default function PaymentMethodScreen(props) {
 
     const dispatch = useDispatch();
-    const cart = useSelector(state => state.cart);
-    const { shippingAddress } = cart;
+    const userSignin = useSelector(state => state.userSignin);
+    const {userInfo} = userSignin;
+    let local = localStorage.getItem('shippingAddress')
+/*
+    This is Basir's code, causing react render error
+        if(!cart.shippingAddress.address) {
+            props.history.push('/shipping');
+        }
+*/
 
-    if(!shippingAddress.address) {
-        props.history.push('/shipping');
-    }
+    useEffect(() => {
+        if(!userInfo) {
+            props.history.push('/signin');
+        }
+        if( local === null) {
+            props.history.push('/shipping');
+        }
+    })
+  
+    
+    
 
     const [paymentMethod, setPaymentMethod] = useState('paypal');
 
