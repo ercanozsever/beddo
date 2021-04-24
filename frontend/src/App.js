@@ -1,29 +1,64 @@
 import React from 'react';
 import HomeScreen from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 //import En from './Components/En';
 //import Tr from './Components/Tr';
 import './App.css';
 import CartScreen from './screens/CartScreen';
+import SignInScreen from './screens/SignInScreen';
+import { useSelector } from 'react-redux';
+import { signout } from './actions/userActions';
+import RegisterScreen from './screens/RegisterScreen';
+import ShippingAddressScreen from './screens/ShippingAddressScreen';
+import PaymentMethodScreen from './screens/PaymentMethodScreen';
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  const cartItems = useSelector(state => state.cart.cartItems);
+  const numberOfItemsInCart = cartItems.length;
+  const userSignin = useSelector(state => state.userSignin);
+  const {userInfo} = userSignin;
+  
+  function signoutHandler() {
+    dispatch(signout());
+  }
 
   return (
     <Router>
       <div className="grid-container">
         <header className="row">
             <div>
-                <a className="brand" href="/">beddo™</a>
+                <Link className="brand" to="/">beddo™</Link>
             </div>
             <div>
-                <a href="/sepet">Sepet</a>
-                <a href="/musteri-hizmetleri">Müşteri Hizmetleri</a>
+                <Link to="/sepet">Sepet {numberOfItemsInCart > 0 && <span className="badge">{numberOfItemsInCart}</span>}</Link>
+                {
+                  userInfo ? 
+                  <div className="dropdown">
+                    <Link to='#'>
+                      {userInfo.name} <i className="fa fa-caret-down"></i>{' '}
+                    </Link> 
+                    <ul className="dropdown-content">
+                        <Link to='#signout' onClick={signoutHandler}>
+                          Çıkış yap
+                        </Link>
+                    </ul>
+                  </div>
+                  : <Link to="/signin">Sign in</Link>
+                }
             </div>
         </header>
         <main>
-            <Route path='/cart/:id?' component={CartScreen} />
+            <Route path='/sepet/:id?' component={CartScreen} />
             <Route path='/product/:id' component={ProductScreen} />
+            <Route path='/signin' component={SignInScreen} />
+            <Route path='/register' component={RegisterScreen} />
+            <Route path='/shipping' component={ShippingAddressScreen} />
+            <Route path='/payment' component={PaymentMethodScreen} />
             <Route exact path='/' component={HomeScreen} />
         </main>
         <footer className="row center">

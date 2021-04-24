@@ -10,7 +10,7 @@ export const listProducts = () => async (dispatch) => {
     dispatch({
         type: PRODUCT_LIST_REQUEST
     });
-    Axios.get('/api/products')
+    await Axios.get('/api/products')
         .then((response) => {
             dispatch({ type: PRODUCT_LIST_SUCCESS, payload: response.data })
         }).catch((error) => {
@@ -22,7 +22,7 @@ export const detailsProduct = (productId) => async (dispatch) => {
     dispatch({
         type: PRODUCT_DETAILS_REQUEST, payload: productId
     });
-    Axios.get(`/api/products/${productId}`)
+    await Axios.get(`/api/products/${productId}`)
         .then((response) => {
             dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: response.data })
         }).catch((error) => {

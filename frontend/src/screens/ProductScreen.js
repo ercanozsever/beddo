@@ -19,7 +19,7 @@ export default function ProductScreen(props) {
     }, [dispatch, productId]);
 
     function addToCardHandler() {
-        props.history.push(`/cart/${productId}?quantity=${quantity}`);
+        props.history.push(`/sepet/${productId}?quantity=${quantity}`);
     }
 
     return (

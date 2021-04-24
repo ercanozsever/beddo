@@ -1,7 +1,25 @@
+import bcrypt from 'bcryptjs';
+
 const data = {
-    products: [
+    users: [
         {
-            _id: '1',
+            name: 'ercan',
+            email: 'eric@example.com',
+            password: bcrypt.hashSync('1234', 8),
+            isAdmin: true
+        },
+        {
+            name: 'joe',
+            email: 'joe@example.com',
+            password: bcrypt.hashSync('1235', 8),
+            isAdmin: false
+        },
+        
+    ],
+
+    products: [
+        
+        {
             name: 'beddo™ Bambu Serisi | Standart Boy | Ortopedik Minder',
             category: 'Yastıklar',
             image: '/images/BB-001-HK.jpg',
@@ -14,7 +32,6 @@ const data = {
         },
 
         {
-            _id: '2',
             name: 'beddo™ Bambu Serisi | Isı Terapili | Bel Yastığı',
             category: 'Yastıklar',
             image: '/images/BB-002-HK.jpg',
@@ -27,7 +44,6 @@ const data = {
         },
 
         {
-            _id: '3',
             name: 'beddo™ Bambu Serisi | Masa Altı | Ayaklık Yastık',
             category: 'Yastıklar',
             image: '/images/BB-005-HK.jpg',
@@ -40,7 +56,6 @@ const data = {
         },
 
         {
-            _id: '4',
             name: 'beddo™ Bambu Serisi | Ortopedik Diz Yastığı',
             category: 'Yastıklar',
             image: '/images/BB-006-HK.jpg',
@@ -53,7 +68,6 @@ const data = {
         },
 
         {
-            _id: '5',
             name: 'beddo™ Bambu Serisi | Ortopedik Boyun | Seyahat Yastığı',
             category: 'Yastıklar',
             image: '/images/BB-003-HK.jpg',
@@ -64,9 +78,8 @@ const data = {
             numReviews: 4,
             description: 'Kaliteli ürünler'
         },
-
+ 
         {
-            _id: '6',
             name: 'beddo™ Bambu Serisi | Ortopedik Araç Yastığı',
             category: 'Yastıklar',
             image: '/images/BB-004-ARC-HK.jpg',
@@ -77,7 +90,6 @@ const data = {
             numReviews: 7,
             description: 'Kaliteli ürünler'
         },
-        
     ],
 };
 
