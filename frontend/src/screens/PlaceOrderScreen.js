@@ -1,10 +1,16 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
+import { createOrder } from '../actions/orderActions';
 import CheckoutSteps from '../components/CheckoutSteps'
+import { ORDER_CREATE_RESET } from '../constants/orderConstants';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
 
 export default function PlaceOrderScreen(props) {
 
+    const orderCreate = useSelector(state => state.orderCreate);
+    const {loading, success, error, order} = orderCreate;
     const cart = useSelector(state => state.cart);
     const userSignin = useSelector(state => state.userSignin);
     const {userInfo} = userSignin;
@@ -23,18 +29,24 @@ export default function PlaceOrderScreen(props) {
     
 
     const toPrice = (num) => Number(num.toFixed(2));
-
-    console.log(toPrice(10,51365854));
-
-    cart.itemsPrice = toPrice(cart.cartItems.reduce((a, c) => a + c.quantity * c.price, 0));
+    console.log(cart.cartItems[0].vat);
+    cart.itemsPrice = toPrice(cart.cartItems.reduce((a, c) => a + c.quantity * (c.price/c.vat), 0));
     console.log(cart.itemsPrice);
     cart.shippingPrice = cart.itemsPrice > 100 ? toPrice(0) : toPrice(10);
     cart.taxPrice = toPrice(0.15 * cart.itemsPrice);
     cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
+    const dispatch = useDispatch();
 
-    function placeOrderHandler(e) {
-        //TODO later
+    function placeOrderHandler() {
+        dispatch(createOrder({...cart, orderItems: cart.cartItems}));
     }
+
+    useEffect(() => {
+        if(success) {
+            props.history.push(`/order/${order._id}`);
+            dispatch({type: ORDER_CREATE_RESET});
+        }
+    }, [dispatch, success, order, props.history]);
 
     return (
         <div>
@@ -126,12 +138,14 @@ export default function PlaceOrderScreen(props) {
                                 <button 
                                     className="primary block" 
                                     type="submit" 
-                                    onSubmit={placeOrderHandler}
+                                    onClick={placeOrderHandler}
                                     disabled={cart.cartItems.length === 0}
                                 >
                                     Siparişi Tamamlayın
                                 </button>
                             </li>
+                            {loading && <LoadingBox></LoadingBox>}
+                            {error && <MessageBox variant="danger">{error}</MessageBox>}
                         </ul>
                     </div>
                 </div>

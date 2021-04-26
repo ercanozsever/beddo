@@ -26,7 +26,7 @@ function App() {
   
   function signoutHandler() {
       dispatch(signout());
-    //window.location.reload();
+      window.location.reload();
   }
 
   return (
