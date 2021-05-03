@@ -29,12 +29,14 @@ export default function PlaceOrderScreen(props) {
     
 
     const toPrice = (num) => Number(num.toFixed(2));
-    console.log(cart.cartItems[0].vat);
-    cart.itemsPrice = toPrice(cart.cartItems.reduce((a, c) => a + c.quantity * (c.price/c.vat), 0));
+    //console.log(cart.cartItems[0].vat);
+    cart.itemsPrice = toPrice(cart.cartItems.reduce((a, c) => a + c.quantity * c.price, 0));
     console.log(cart.itemsPrice);
     cart.shippingPrice = cart.itemsPrice > 100 ? toPrice(0) : toPrice(10);
-    cart.taxPrice = toPrice(0.15 * cart.itemsPrice);
-    cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
+    cart.taxPrice = toPrice(0.08 * cart.itemsPrice);
+    cart.taxExcludedPrice = toPrice(cart.itemsPrice - cart.taxPrice);
+    cart.totalPrice = toPrice(cart.taxExcludedPrice + cart.shippingPrice + cart.taxPrice);
+    console.log([cart.taxExcludedPrice, cart.shippingPrice, cart.taxPrice]);
     const dispatch = useDispatch();
 
     function placeOrderHandler() {
@@ -109,7 +111,7 @@ export default function PlaceOrderScreen(props) {
                             <li>
                                 <div className="row">
                                     <div>Ürün tutarı</div>
-                                    <div>{cart.itemsPrice} TL</div>
+                                    <div>{cart.taxExcludedPrice} TL</div>
                                 </div>
                             </li>
                             <li>

@@ -9,6 +9,8 @@ export default function ShippingAddressScreen(props) {
 
     const userSignin = useSelector(state => state.userSignin);
     const {userInfo} = userSignin;
+    //const cart = useSelector(state => state.cart);
+    //const { shippingAddress } = cart;
     
     useEffect(() => {
         if(!userInfo) {

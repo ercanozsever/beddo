@@ -5,6 +5,12 @@ import { isAuth } from '../utils.js';
 
 const orderRouter = express.Router();
 
+orderRouter.get('/mine', isAuth, expressAsyncHandler(async (req, res) => {
+    const order = await Order.find({ user: req.user._id });
+    res.send(order);
+}));
+
+
 orderRouter.post(
     '/', 
     isAuth,
@@ -31,6 +37,38 @@ orderRouter.post(
             )
         }
     })
+);
+
+orderRouter.get(
+    '/:id', 
+    isAuth, 
+    expressAsyncHandler(async (req, res) => {
+        const order = await Order.findById(req.params.id);
+        if(order) {
+            res.send(order);
+        } else {
+            res.status(404).send({ message: 'Sipariş bulunamadı'});
+        }
+    })
+);
+
+orderRouter.put('/:id/pay', isAuth, expressAsyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id);
+    if(order) {
+        order.isPaid = true;
+        order.paidAt = Date.now();
+        order.paymentResult = {
+            id: req.body.id,
+            statur: req.body.status,
+            update_time: req.body.update_time,
+            email_address: req.body.email_address,
+        }
+        const updatedOrder = await order.save();
+        res.send({ message: 'Ödeme yapıldı', order: updatedOrder });
+    }  else {
+        res.status(404).send({ message: 'Sipariş bulunamadı' });
+    }
+  })
 );
 
 export default orderRouter;
